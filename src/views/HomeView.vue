@@ -2,7 +2,8 @@
 import { MathfieldElement, convertLatexToMarkup } from 'mathlive'
 import { ComputeEngine, type AssignValue } from '@cortex-js/compute-engine'
 import { onMounted, onBeforeMount, ref } from 'vue'
-import { useLocalStorage } from '@vueuse/core'
+import { onStartTyping, useLocalStorage } from '@vueuse/core'
+import { UseTimeAgo } from '@vueuse/components'
 
 const ce = new ComputeEngine()
 
@@ -51,6 +52,10 @@ onMounted(() => {
     })
     mf.focus()
   }
+})
+
+onStartTyping(() => {
+  mfe.value?.focus()
 })
 
 const handleInsert = (value: string) => {
@@ -182,6 +187,18 @@ const handleMemoryAdd = () => {
         @backspace="handleBackspace"
         @assign="handleAssign"
         @memory-add="handleMemoryAdd"
+        @cursor-left="
+          () => {
+            mfe?.executeCommand('moveToPreviousChar')
+            mfe?.focus()
+          }
+        "
+        @cursor-right="
+          () => {
+            mfe?.executeCommand('moveToNextChar')
+            mfe?.focus()
+          }
+        "
       />
     </div>
 
@@ -208,7 +225,9 @@ const handleMemoryAdd = () => {
 
         <div class="mt-2 flex items-center justify-between">
           <div class="text-xs color-zinc-600 dark:color-zinc-300">
-            {{ new Date(item.time).toLocaleString() }}
+            <UseTimeAgo v-slot="{ timeAgo }" :time="new Date(item.time)">
+              {{ timeAgo }}
+            </UseTimeAgo>
           </div>
           <button @click="history.splice(index, 1)" class="p-0 border-none">
             <span class="i-mdi:delete" />
