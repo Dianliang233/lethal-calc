@@ -20,6 +20,10 @@
   --math-font-family: 'KaTeX_Math', Cambria, Cochin, Georgia, Times, 'Times New Roman', math, serif;
 }
 
+body {
+  @apply overflow-x-hidden;
+}
+
 @media (prefers-color-scheme: dark) {
   body {
     @apply text-white bg-black;

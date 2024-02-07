@@ -51,7 +51,6 @@ const handleLongPress = (flag: Ref, action: () => any) => {
 const leftRef = ref()
 const leftLongPress = ref(false)
 onLongPress(leftRef, () => {
-  console.log('sss')
   leftLongPress.value = true
   handleLongPress(leftLongPress, () => emit('cursorLeft'))
 })
@@ -185,8 +184,24 @@ onLongPress(rightRef, () => {
           <span v-html="convertLatexToMarkup('\\csc')" />
         </RndBtn>
 
-        <RndBtn>7</RndBtn>
-        <RndBtn>7</RndBtn>
+        <RndBtn class="text-xl" @click="input('\\sum_{#?=#?}^{#?} #?')">
+          <span
+            v-html="
+              convertLatexToMarkup('\\sum_{\\square=\\square}^{\\square} \\square', {
+                mathstyle: 'textstyle',
+              })
+            "
+          />
+        </RndBtn>
+        <RndBtn class="text-xl" @click="input('\\prod_{#?=#?}^{#?} #?')">
+          <span
+            v-html="
+              convertLatexToMarkup('\\prod_{\\square=\\square}^{\\square} \\square', {
+                mathstyle: 'textstyle',
+              })
+            "
+          />
+        </RndBtn>
         <RndBtn class="text-2xl" @click="input('\\cot^{-1}(#@)')">
           <span v-html="convertLatexToMarkup('\\cot^{-1}')" />
         </RndBtn>
@@ -201,7 +216,9 @@ onLongPress(rightRef, () => {
           />
         </RndBtn>
         <RndBtn @click="input('\\infty')"><span v-html="convertLatexToMarkup('\\infty')" /></RndBtn>
-        <RndBtn>7</RndBtn>
+        <RndBtn @click="input('\\mathrm{d}#@')"
+          ><span v-html="convertLatexToMarkup('\\mathrm{d}\\square')"
+        /></RndBtn>
         <RndBtn>7</RndBtn>
       </template>
     </div>

@@ -2,7 +2,13 @@
 import { MathfieldElement, convertLatexToMarkup } from 'mathlive'
 import { ComputeEngine, type AssignValue } from '@cortex-js/compute-engine'
 import { onMounted, onBeforeMount, ref } from 'vue'
-import { onStartTyping, useLocalStorage } from '@vueuse/core'
+import {
+  breakpointsTailwind,
+  onClickOutside,
+  onStartTyping,
+  useBreakpoints,
+  useLocalStorage,
+} from '@vueuse/core'
 import { UseTimeAgo } from '@vueuse/components'
 
 const ce = new ComputeEngine()
@@ -34,9 +40,12 @@ interface HistoryItem {
   approx: boolean
 }
 
+const breakpoints = useBreakpoints(breakpointsTailwind)
+
 const history = useLocalStorage<HistoryItem[]>('history', [])
 
-const sidebar = ref(false)
+const sidebar = useLocalStorage('sidebar', false)
+const sidebarRef = ref()
 const mfe = ref<MathfieldElement>()
 const res = ref('')
 
@@ -56,6 +65,13 @@ onMounted(() => {
 
 onStartTyping(() => {
   mfe.value?.focus()
+})
+
+onClickOutside(sidebarRef, () => {
+  console.log(breakpoints.isSmaller('md'))
+  if (sidebar.value && breakpoints.isSmaller('lg')) {
+    sidebar.value = false
+  }
 })
 
 const handleInsert = (value: string) => {
@@ -146,13 +162,26 @@ const handleMemoryAdd = () => {
 
 <template>
   <main
-    class="grid transition w-screen h-screen"
-    :style="{
-      gridTemplateColumns: '1fr min-content',
-    }"
+    class="lg:container lg:mx-auto transition h-screen grid grid-cols-[1fr] lg:grid-cols-[1fr_min-content]"
   >
     <div class="transition grid grid-rows-10">
       <div class="row-span-4 p-6 relative">
+        <math-field
+          @input="
+            (e: InputEvent) => {
+              if (e.inputType === 'insertLineBreak') handleCommit()
+            }
+          "
+          class="overflow-auto w-full h-full p-1 bg-transparent border-none focus:outline-none text-5xl text-right"
+          math-virtual-keyboard-policy="manual"
+          ref="mfe"
+        />
+
+        <div
+          class="absolute max-w-full px-7 pb-8 overflow-auto right-0 bottom-0 bg-transparent border-none focus:outline-none text-4xl text-right"
+          v-html="res"
+        />
+
         <RndBtn class="absolute bottom-0 right-1" @click="sidebar = !sidebar">
           <span
             class="i-mdi:chevron-left transition transition-all"
@@ -161,22 +190,6 @@ const handleMemoryAdd = () => {
             }"
           />
         </RndBtn>
-
-        <math-field
-          @input="
-            (e: InputEvent) => {
-              if (e.inputType === 'insertLineBreak') handleCommit()
-            }
-          "
-          class="w-full h-full p-1 bg-transparent border-none focus:outline-none text-5xl text-right"
-          math-virtual-keyboard-policy="manual"
-          ref="mfe"
-        />
-
-        <div
-          class="absolute right-7 bottom-8 bg-transparent border-none focus:outline-none text-4xl text-right"
-          v-html="res"
-        />
       </div>
       <InputArea
         class="row-span-6"
@@ -204,11 +217,12 @@ const handleMemoryAdd = () => {
 
     <TransitionGroup
       tag="ul"
-      name="history"
+      name="sidebar"
+      ref="sidebarRef"
       :class="{
-        'transition transition-all list-none h-screen p-0 m-0 flex flex-col-reverse overflow-y-auto border-l-solid border-zinc-200 dark:border-zinc-800': true,
-        'w-[25vw]': sidebar,
-        'w-0': !sidebar,
+        'bg-white dark:bg-black w-[75vw] md:w-[40vw] lg:w-[25vw] <lg:absolute <lg:right-0 flex transition transition-all list-none h-screen p-0 m-0 flex-col-reverse overflow-y-auto border-zinc-200 dark:border-zinc-800': true,
+        '<lg-translate-x-0 <lg-shadow-xl border-l-solid': sidebar,
+        '<lg-translate-x-[75vw] lg:w-0 lg:border-none': !sidebar,
       }"
     >
       <li
@@ -239,19 +253,19 @@ const handleMemoryAdd = () => {
 </template>
 
 <style>
-.history-move,
-.history-enter-active,
-.history-leave-active {
+.sidebar-move,
+.sidebar-enter-active,
+.sidebar-leave-active {
   transition: all 0.5s ease;
 }
 
-.history-enter-from,
-.history-leave-to {
+.sidebar-enter-from,
+.sidebar-leave-to {
   opacity: 0;
   transform: translateX(1000px);
 }
 
-.history-leave-active {
+.sidebar-leave-active {
   position: absolute;
 }
 
