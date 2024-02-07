@@ -147,8 +147,8 @@ const handleMemoryAdd = () => {
     }"
   >
     <div class="transition grid grid-rows-10">
-      <div class="row-span-3 grid grid-rows-5 p-3 relative">
-        <RndBtn class="absolute bottom-1 right-1" @click="sidebar = !sidebar">
+      <div class="row-span-4 p-6 relative">
+        <RndBtn class="absolute bottom-0 right-1" @click="sidebar = !sidebar">
           <span
             class="i-mdi:chevron-left transition transition-all"
             :style="{
@@ -163,18 +163,18 @@ const handleMemoryAdd = () => {
               if (e.inputType === 'insertLineBreak') handleCommit()
             }
           "
-          class="row-span-4 w-full h-full bg-transparent border-none focus:outline-none text-5xl text-right"
+          class="w-full h-full p-1 bg-transparent border-none focus:outline-none text-5xl text-right"
           math-virtual-keyboard-policy="manual"
           ref="mfe"
         />
 
         <div
-          class="row-span-1 w-full h-full bg-transparent border-none focus:outline-none text-3xl text-right"
+          class="absolute right-7 bottom-8 bg-transparent border-none focus:outline-none text-4xl text-right"
           v-html="res"
         />
       </div>
       <InputArea
-        class="row-span-7"
+        class="row-span-6"
         @input="handleInsert"
         @convert="handleConvert"
         @commit="handleCommit"
