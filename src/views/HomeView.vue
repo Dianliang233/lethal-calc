@@ -161,10 +161,8 @@ const handleMemoryAdd = () => {
 </script>
 
 <template>
-  <main
-    class="lg:container lg:mx-auto transition h-screen grid grid-cols-[1fr] lg:grid-cols-[1fr_min-content]"
-  >
-    <div class="transition grid grid-rows-10">
+  <main class="lg:container lg:mx-auto transition h-screen flex">
+    <div class="flex-1 transition grid grid-rows-10">
       <div class="row-span-4 p-6 relative">
         <math-field
           @input="
@@ -220,9 +218,9 @@ const handleMemoryAdd = () => {
       name="sidebar"
       ref="sidebarRef"
       :class="{
-        'bg-white dark:bg-black w-[75vw] md:w-[40vw] lg:w-[25vw] <lg:absolute <lg:right-0 flex transition transition-all list-none h-screen p-0 m-0 flex-col-reverse overflow-y-auto border-zinc-200 dark:border-zinc-800': true,
-        '<lg-translate-x-0 <lg-shadow-xl border-l-solid': sidebar,
-        '<lg-translate-x-[75vw] lg:w-0 lg:border-none': !sidebar,
+        'bg-white dark:bg-black break-anywhere w-3/4 md:w-2/5 <lg:absolute <lg:right-0 flex transition transition-all list-none h-screen p-0 m-0 flex-col-reverse overflow-y-auto border-zinc-200 dark:border-zinc-800': true,
+        '<lg-translate-x-0 <lg-shadow-xl border-l-solid lg:w-1/4': sidebar,
+        '<lg-translate-x-[100%] lg:w-0 lg:border-none': !sidebar,
       }"
     >
       <li
