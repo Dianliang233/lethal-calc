@@ -162,7 +162,7 @@ const handleMemoryAdd = () => {
 
 <template>
   <main class="lg:container lg:mx-auto transition h-screen flex">
-    <div class="flex-1 transition grid grid-rows-10">
+    <div class="flex-none <lg:w-screen lg:flex-1 transition grid grid-rows-10">
       <div class="row-span-4 p-6 relative">
         <math-field
           @input="
@@ -218,8 +218,8 @@ const handleMemoryAdd = () => {
       name="sidebar"
       ref="sidebarRef"
       :class="{
-        'bg-white dark:bg-black break-anywhere w-3/4 md:w-2/5 <lg:absolute <lg:right-0 flex transition transition-all list-none h-screen p-0 m-0 flex-col-reverse overflow-y-auto border-zinc-200 dark:border-zinc-800': true,
-        '<lg-translate-x-0 <lg-shadow-xl border-l-solid lg:w-1/4': sidebar,
+        'bg-white dark:bg-black break-anywhere w-3/4 md:w-2/5 <lg:right-0 flex transition transition-all list-none h-screen p-0 m-0 flex-col-reverse overflow-y-auto border-zinc-200 dark:border-zinc-800': true,
+        '<lg-absolute <lg-translate-x-0 <lg-shadow-xl border-l-solid lg:w-1/4': sidebar,
         '<lg-translate-x-[100%] lg:w-0 lg:border-none': !sidebar,
       }"
     >
@@ -260,6 +260,7 @@ const handleMemoryAdd = () => {
 .sidebar-enter-from,
 .sidebar-leave-to {
   opacity: 0;
+  position: absolute;
   transform: translateX(1000px);
 }
 

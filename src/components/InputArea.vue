@@ -329,7 +329,6 @@ const gtSm = breakpoints.greater('sm')
 
 .panel-leave-active {
   position: absolute;
-  top: 0;
-  @apply bottom-6;
+  @apply top-0 bottom-6 left-6 right-6;
 }
 </style>
